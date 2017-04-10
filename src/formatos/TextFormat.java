@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  *
  * @author Roberto
  */
-public class TextFromat {
+public class TextFormat {
 
     private static final String PATTERN_EMAIL = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
             + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
