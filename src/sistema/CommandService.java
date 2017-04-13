@@ -11,7 +11,6 @@ import java.io.InputStreamReader;
  */
 public class CommandService {
 
-   
     /**
      * Ejecuta un comando y devuelve la salida en String.
      *
@@ -21,62 +20,41 @@ public class CommandService {
     public String executeCommand(String cmd) {
         String linea = null;
         String salida = null;
+        String lineaError = null;
+        String salidaError = null;
+        Process proceso = null;
         try {
-            Process proceso = Runtime.getRuntime().exec(cmd);
+            String[] pipelineCmd = {
+                "/bin/sh",
+                "-c",
+                cmd
+            };
+            proceso = Runtime.getRuntime().exec(pipelineCmd);
             InputStreamReader entrada = new InputStreamReader(proceso.getInputStream());
+            InputStreamReader error = new InputStreamReader(proceso.getErrorStream());
             BufferedReader stdInput = new BufferedReader(entrada);
+            BufferedReader stdError = new BufferedReader(error);
+            System.out.println("Comando a ejecutar " + cmd);
             if ((linea = stdInput.readLine()) != null) {
-                System.out.println("Comando ejecutado Correctamente " + cmd);
                 salida = linea;
                 while ((linea = stdInput.readLine()) != null) {
                     salida += linea + "\n";
                 }
+                System.out.println("Resultado del comando " + salida);
             } else {
                 System.out.println("No se a producido ninguna salida");
             }
+            if ((lineaError = stdError.readLine()) != null) {
+                salidaError = lineaError;
+                while ((lineaError = stdError.readLine()) != null) {
+                    salidaError += lineaError + "\n";
+                }
+                System.out.println(salidaError);
+            }
         } catch (IOException ioe) {
-            System.out.println(ioe.getMessage());
+        } catch (Exception e) {
         }
         return salida;
     }
 
-    /**
-     * Ejecuta un comando y devuelve la salida en String.
-     *
-     * @param cmd comando a ejecutar
-     * @param pipeline parametro necesario para ejecutar comndos con llamado a
-     * otros procesos como ls -la | grep /root
-     * @return
-     */
-    public String executeCommand(String cmd, boolean pipeline) {
-        String linea = null;
-        String salida = null;
-        Process proceso = null;
-        try {
-            if (pipeline) {
-                String[] pipelineCmd = {
-                    "/bin/sh",
-                    "-c",
-                    cmd
-                };
-                proceso = Runtime.getRuntime().exec(pipelineCmd);
-            } else {
-                proceso = Runtime.getRuntime().exec(cmd);
-            }
-            InputStreamReader entrada = new InputStreamReader(proceso.getInputStream());
-            BufferedReader stdInput = new BufferedReader(entrada);
-            if ((linea = stdInput.readLine()) != null) {
-                System.out.println("Comando ejecutado Correctamente " + cmd);
-                salida = linea;
-                while ((linea = stdInput.readLine()) != null) {
-                    salida += linea + "\n";
-                }
-            } else {
-                System.out.println("No se a producido ninguna salida");
-            }
-        } catch (IOException ioe) {
-            System.out.println(ioe.getMessage());
-        }
-        return salida;
-    }
 }
