@@ -14,13 +14,14 @@ import org.apache.log4j.Logger;
 public class CommandService {
 
     private static Logger logger = LogManager.getLogger(CommandService.class);
+
     /**
      * Ejecuta un comando y devuelve la salida en String.
      *
      * @param cmd comando a ejecutar
      * @return
      */
-       public String executeCommand(String cmd) {
+    public String executeCommand(String cmd) {
         String linea = null;
         String salida = null;
         String lineaError = null;

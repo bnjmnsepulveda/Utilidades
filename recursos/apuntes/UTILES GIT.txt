@@ -1,0 +1,2 @@
+
+git commit -m "Mensaje corregido" --amend
