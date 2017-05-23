@@ -29,7 +29,7 @@ unzip archivo.zip
 #cambiar la hora por terminal
 date --set "2014-01-28 15:00"
 
-#edison reparar archivos dañados read
+#edison reparar archivos daï¿½ados read
 e2fsck /dev/root
 
 #ver conexiones activas en postgres
@@ -48,6 +48,8 @@ export VARIABLE_ENTORNO=mi_variable
 #eliminar variable de entorno
 unset VARIABLE_ENTORNO
 
+#chkconfig
+ chkconfig --level 35 mysql off
 
 PARA DESBLOQUEAR UNA IP USA EL SIGUIENTE EJEMPLO
 iptables -I INPUT -s 189.216.139.148 -j ACCEPT

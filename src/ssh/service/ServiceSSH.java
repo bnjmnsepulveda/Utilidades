@@ -20,7 +20,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import ssh.exception.CommandException;
-import static ssh.interfaces.ServiceSSH.SFTP_CHANNEL;
 
 /**
  *
@@ -33,6 +32,7 @@ public class ServiceSSH {
     private final String Servidor;
     private final int puerto;
     private Session sesion;
+    private static final String SFTP_CHANNEL="sftp";
 
     public ServiceSSH(String usuario, String clave, String Servidor, int puerto) {
         this.usuario = usuario;
