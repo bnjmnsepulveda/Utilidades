@@ -1,0 +1,29 @@
+#ingesar  base datos
+psql -U postgres
+psql -U "user" -W -h "host" "database"
+
+\l #lista base datos
+
+CREATE DATABASE basename;
+DROP DATABASE basename;
+
+#usuarios conectados base de datos
+SELECT COUNT(*) AS users_online FROM pg_stat_activity WHERE datname='test_fail_over';
+
+#eliminar conexiones base de datos
+SELECT pg_terminate_backend(procpid) FROM pg_stat_activity WHERE datname = 'test_fail_over';
+
+#ver columnas de una tabla
+\d "tabla_nombre"
+
+El equivalente de SHOW TABLES es
+basename=# \d
+
+El equivalente de SHOW DATABASES es
+basename=# \l
+
+El equivalente de SHOW COLUMNS es
+basename=# \d table
+
+El equivalente de DESCRIBE TABLE es
+basename=# \d+ table

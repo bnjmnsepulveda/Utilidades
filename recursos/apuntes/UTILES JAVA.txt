@@ -1,0 +1,9 @@
+Recorrer HashMap
+Map<Integer, String> datos = new HashMap<Integer, String>();
+datos.put(1, "uno");
+datos.put(2, "dos");
+datos.put(3, "tres");
+
+for (Map.Entry<Integer, String> entry : datos.entrySet()) {
+    System.out.println("clave=" + entry.getKey() + ", valor=" + entry.getValue());
+}
