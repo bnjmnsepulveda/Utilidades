@@ -7,3 +7,33 @@ datos.put(3, "tres");
 for (Map.Entry<Integer, String> entry : datos.entrySet()) {
     System.out.println("clave=" + entry.getKey() + ", valor=" + entry.getValue());
 }
+
+##select code
+   public List<Monitor> read(String piloto){
+        List<Monitor> l = null;
+        Monitor m;
+        try {            
+            Connection conn = null;
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            String sql = "SELECT * FROM secretaria WHERE piloto_asociado = ? AND estado_correo = 1 AND usa_mail = true ORDER BY fecha_ult_mail ASC";//
+
+            try {
+                Conexion c = new Conexion();
+                conn = c.conectar();
+                ps = conn.prepareStatement(sql);
+                ps.setString(1, piloto);
+                rs = ps.getResultSet();
+                while(rs.next()){
+                    
+                }
+                
+            } catch (SQLException e) {
+                if(conn!=null)conn.close();
+                if(ps!=null)ps.close();
+                if(rs!=null)rs.close();
+            }
+        } catch (Exception e) {
+        }
+        return l;
+    }
