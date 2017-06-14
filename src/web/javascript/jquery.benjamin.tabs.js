@@ -1,24 +1,19 @@
-/**
- * 
-NECESITA EL PLUGIN jquery.scrollTo.min.js
- */
 (function ($) {
     'use strict';
     function crearContainerTab(conf) {
         var flechaIzquierda = '<div id="back-' + conf.id.replace('#', '') + '" class="flecha-izquierda"><img src="img/llamada/flecha-izquierda.svg" width="10" height="10"></div>';
         var flechaDerecha = '<div id="next-' + conf.id.replace('#', '') + '" class="flecha-derecha"><img src="img/llamada/flecha-derecha.svg" width="10" height="10"></div>';
-
-        var container = '<table><tr><td>' + flechaIzquierda + '</td><td><div id="' + conf.id.replace('#', '') + '-tab-scroll" class="contenedor-tabs" ><div id="' + conf.cabezeraTab.replace('#', '') + '"></div></div></td><td>' + flechaDerecha + '</td></td></table>' +
+        var container = '<div class="container-header-tab">' + flechaIzquierda + '<div id="' + conf.id.replace('#', '') + '-tab-scroll" class="contenedor-tabs" ><div id="' + conf.cabezeraTab.replace('#', '') + '"></div></div>' + flechaDerecha + '</div>' +
                 '<div id="' + conf.contenidoTab.replace('#', '') + '" ></div>';
 
         if ($(conf.id + ' div ' + conf.cabezeraTab).html() === undefined) {
             $(conf.id).html(container);
             $(conf.cabezeraTab).width(0);
             $('#back-' + conf.id.replace('#', '')).on('click', function () {
-                $(conf.id + '-tab-scroll').scrollTo('-=40px', 10);
+                $(conf.id + '-tab-scroll').scrollTo('-=250px', 50);
             });
             $('#next-' + conf.id.replace('#', '')).on('click', function () {
-                $(conf.id + '-tab-scroll').scrollTo('+=40px', 10);
+                $(conf.id + '-tab-scroll').scrollTo('+=250px', 50);
             });
         }
     }
@@ -29,6 +24,9 @@ NECESITA EL PLUGIN jquery.scrollTo.min.js
         if ($('#tab-' + id).attr('id') !== undefined) {
             seleccionarTab(conf, id);
             return;
+        }
+        if (titulo.length > 30) {
+            titulo = titulo.substring(0, 25) + '...';
         }
         var head = '<div id="tab-' + id + '" class="tab-header tab-active" >\n\
                         <span>' + titulo + '</span>\n\
@@ -67,6 +65,7 @@ NECESITA EL PLUGIN jquery.scrollTo.min.js
         });
         tabContenido.append(content);
         $(conf.cabezeraTab).width($(conf.cabezeraTab).width() + conf.largoTab);
+        tabHead.children('.tab-header').children('span').width(conf.largoTab - 60);
         $(conf.id + '-tab-scroll').scrollTo('100%', 10);
     }
 
@@ -102,6 +101,13 @@ NECESITA EL PLUGIN jquery.scrollTo.min.js
         $('#tab-contenido-' + id).remove();
         $(conf.cabezeraTab).width($(conf.cabezeraTab).width() - conf.largoTab);
         seleccionarTab(conf, id2);
+        if (id2 !== undefined) {
+            conf.onSelectAfterDelete(id2);
+        } else {
+            var id3 = $(conf.cabezeraTab).children('.tab-active').attr('id');
+            id3 = id3.split('tab-')[1];
+            conf.onSelectAfterDelete(id3);
+        }
     }
 
     function seleccionarTab(conf, id) {
@@ -127,7 +133,8 @@ NECESITA EL PLUGIN jquery.scrollTo.min.js
             contenidoTab: '#' + elementId + '-contenido-tab',
             largoTab: 250,
             onSelect: opc.onSelect,
-            onDelete: opc.onDelete
+            onDelete: opc.onDelete,
+            onSelectAfterDelete: opc.onSelectAfterDelete
         };
         switch (metodo) {
             case 'crearTab':
