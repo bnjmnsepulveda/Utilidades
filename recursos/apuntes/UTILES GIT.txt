@@ -1,6 +1,17 @@
 #todas las ramas incluidas las remotas
 git branch -a
+
 #agregar rama remota
 git checkout -b nombre_rama origin/rama_remota
+
 #corregir ultimo commit
-git commit -m "Mensaje corregido" --amend
+git commit -m 'Mensaje corregido' --amend
+
+#guardar cambios sin hacer commit util para funcionalidades que interumpen un ttabajo en branch
+git stash save "nombre_stash"
+
+#mostrar stash
+git stash
+
+#guardar credenciales
+git config --global credencial.helper store
