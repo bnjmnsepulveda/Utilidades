@@ -62,3 +62,6 @@ iptables -F
 
 #PARA LISTAR LAS REGLAS DE LAS TABLAS IP
 iptables -L -n
+
+#ver ip no incluyendo de loopback
+hostname -I
