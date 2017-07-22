@@ -15,17 +15,17 @@ import java.util.Date;
  * @author Roberto
  */
 public class FechaHelper {
-    
-     public static String hora(Date date){
-        SimpleDateFormat dt = new SimpleDateFormat("HH:mm");         
+
+    public static String hora(Date date) {
+        SimpleDateFormat dt = new SimpleDateFormat("HH:mm");
         return dt.format(date);
     }
-    
-    public static String fechaHora(Date date){
-        SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-d HH:mm");         
+
+    public static String fechaHora(Date date) {
+        SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-d HH:mm");
         return dt.format(date);
     }
-    
+
     public static String fechaHoraTimestamp(Timestamp ts) {
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         return df.format(ts);

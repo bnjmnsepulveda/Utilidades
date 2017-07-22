@@ -1,2 +1,6 @@
-
+#todas las ramas incluidas las remotas
+git branch -a
+#agregar rama remota
+git checkout -b nombre_rama origin/rama_remota
+#corregir ultimo commit
 git commit -m "Mensaje corregido" --amend
