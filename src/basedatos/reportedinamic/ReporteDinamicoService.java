@@ -3,17 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package basedatos;
+package basedatos.reportedinamic;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import model.dao.ConexionPostgres;
-import model.dao.PilotoDAO;
-import model.domain.reporte.Data;
-import model.domain.reporte.Fila;
-import model.domain.reporte.Reporte;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,7 +18,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class ReporteDinamicoService {
 
-    private static final Logger logger = LogManager.getLogger(PilotoDAO.class);
+    private static final Logger logger = LogManager.getLogger(ReporteDinamicoService.class);
 
     public Reporte readReporte(String sql, ReporteAdapter adapter) {
         Reporte reporte = null;
@@ -33,7 +28,7 @@ public class ReporteDinamicoService {
             ResultSet rs = null;
 
             try {
-                conn = ConexionPostgres.conectar();
+              //  conn = ConexionPostgres.conectar();
                 ps = conn.prepareStatement(sql);
                 rs = ps.executeQuery();
                 reporte = adapter.read(rs);
@@ -65,7 +60,7 @@ public class ReporteDinamicoService {
             ResultSet rs = null;
 
             try {
-                conn = ConexionPostgres.conectar();
+              //  conn = ConexionPostgres.conectar();
                 ps = conn.prepareStatement(sql);
                 ps = parametros.getParametros(ps);
                 rs = ps.executeQuery();
@@ -97,7 +92,7 @@ public class ReporteDinamicoService {
             PreparedStatement ps = null;
             ResultSet rs = null;
             try {
-                conn = ConexionPostgres.conectar();
+//                conn = ConexionPostgres.conectar();
                 ps = conn.prepareStatement(sql);
                 rs = ps.executeQuery();
                 value = adapter.read(rs);
@@ -129,7 +124,7 @@ public class ReporteDinamicoService {
             ResultSet rs = null;
 
             try {
-                conn = ConexionPostgres.conectar();
+//                conn = ConexionPostgres.conectar();
                 ps = conn.prepareStatement(sql);
                 ps = parametros.getParametros(ps);
                 rs = ps.executeQuery();
