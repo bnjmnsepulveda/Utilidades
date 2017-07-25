@@ -10,8 +10,18 @@ git commit -m 'Mensaje corregido' --amend
 #guardar cambios sin hacer commit util para funcionalidades que interumpen un ttabajo en branch
 git stash save "nombre_stash"
 
-#mostrar stash
+#guardar en stash
 git stash
+
+#listar stash 
+git stash list
+
+#volver a stash mas reciente
+git stash apply
+
+#volver a determinado stash
+git stash apply stash@{<numero de stash>}
+
 
 #guardar credenciales
 git config --global credencial.helper store
