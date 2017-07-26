@@ -25,3 +25,11 @@ git stash apply stash@{<numero de stash>}
 
 #guardar credenciales
 git config --global credencial.helper store
+
+#actualizar .gitignore
+# rm remover archivos chacheados que no se quieren en el repositorio
+git rm -r --cached .
+# add all files as per new .gitignore
+git add .
+# now, commit for new .gitignore to apply
+git commit -m ".gitignore is now working"
