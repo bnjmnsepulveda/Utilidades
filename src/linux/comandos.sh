@@ -65,3 +65,6 @@ iptables -L -n
 
 #ver ip no incluyendo de loopback
 hostname -I
+
+#volver al directorio anterior
+cd -
