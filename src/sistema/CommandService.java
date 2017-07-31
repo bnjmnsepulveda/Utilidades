@@ -84,4 +84,37 @@ public class CommandService {
         return salida;
     }
 
+    @SuppressWarnings("ConvertToTryWithResources")
+    public static String execute(String cmd) throws IOException {
+        String linea;
+        String salida = null;
+        String[] pipelineCmd = {
+            "/bin/bash",
+            "-c",
+            cmd
+        };
+        Process proceso = Runtime.getRuntime().exec(pipelineCmd);
+        InputStreamReader entrada = new InputStreamReader(proceso.getInputStream());
+        BufferedReader stdInput = new BufferedReader(entrada);
+        if ((linea = stdInput.readLine()) != null) {
+            salida = linea;
+            while ((linea = stdInput.readLine()) != null) {
+                salida += linea + "\n";
+            }
+        }        
+        entrada.close();
+        stdInput.close();
+        return salida;
+    }
+
+    public static int executeExitValue(String cmd) throws IOException {
+        String[] pipelineCmd = {
+            "/bin/bash",
+            "-c",
+            cmd
+        };
+        Process proceso = Runtime.getRuntime().exec(pipelineCmd);
+        return proceso.exitValue();
+    }
+    
 }
