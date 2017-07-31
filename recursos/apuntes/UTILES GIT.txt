@@ -22,6 +22,11 @@ git stash apply
 #volver a determinado stash
 git stash apply stash@{<numero de stash>}
 
+#renombrar branch local
+git branch -m <nombre-rama> <nombre-rama-nueva>
+
+#renombrar branch remoto
+git push origin :nombre-rama
 
 #guardar credenciales
 git config --global credencial.helper store
