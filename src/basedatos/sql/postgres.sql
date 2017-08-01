@@ -1,0 +1,4 @@
+--version postgres
+SELECT version();
+
+
