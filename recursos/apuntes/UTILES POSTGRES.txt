@@ -26,4 +26,4 @@ El equivalente de SHOW COLUMNS es
 basename=# \d table
 
 El equivalente de DESCRIBE TABLE es
-basename=# \d+ table
+basename=# \dt table

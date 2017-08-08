@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package basedatos.reportedinamic;
 
 import java.io.Serializable;
@@ -41,6 +37,78 @@ public class Fila  implements Serializable{
             this.data = new ArrayList();
         }
         this.data.add(data);
+        this.dataSize = this.data.size();
+    }
+    
+    public void addData(String value) {
+        Data newData = new Data(value);
+        if (this.data == null) {
+            this.data = new ArrayList();
+        }
+        this.data.add(newData);
+        this.dataSize = this.data.size();
+    }
+    
+    public void addData(String value,String param) {
+        Data newData = new Data(value,param);
+        if (this.data == null) {
+            this.data = new ArrayList();
+        }
+        this.data.add(newData);
+        this.dataSize = this.data.size();
+    }
+    
+    public void addData(int value) {
+        Data newData = new Data(value);
+        if (this.data == null) {
+            this.data = new ArrayList();
+        }
+        this.data.add(newData);
+        this.dataSize = this.data.size();
+    }
+    
+    public void addData(int value,String param) {
+        Data newData = new Data(value,param);
+        if (this.data == null) {
+            this.data = new ArrayList();
+        }
+        this.data.add(newData);
+        this.dataSize = this.data.size();
+    }
+    
+    public void addData(double value) {
+        Data newData = new Data(value);
+        if (this.data == null) {
+            this.data = new ArrayList();
+        }
+        this.data.add(newData);
+        this.dataSize = this.data.size();
+    }
+    
+    public void addData(double value,String param) {
+        Data newData = new Data(value,param);
+        if (this.data == null) {
+            this.data = new ArrayList();
+        }
+        this.data.add(newData);
+        this.dataSize = this.data.size();
+    }
+    
+    public void addData(long value) {
+        Data newData = new Data(value);
+        if (this.data == null) {
+            this.data = new ArrayList();
+        }
+        this.data.add(newData);
+        this.dataSize = this.data.size();
+    }
+    
+    public void addData(long value,String param) {
+        Data newData = new Data(value,param);
+        if (this.data == null) {
+            this.data = new ArrayList();
+        }
+        this.data.add(newData);
         this.dataSize = this.data.size();
     }
     
