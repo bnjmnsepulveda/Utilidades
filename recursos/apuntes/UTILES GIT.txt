@@ -38,3 +38,6 @@ git rm -r --cached .
 git add .
 # now, commit for new .gitignore to apply
 git commit -m ".gitignore is now working"
+
+#eliminar origin remote
+git remote rm <nombre_origin>
