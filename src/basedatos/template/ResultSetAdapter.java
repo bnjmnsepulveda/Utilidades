@@ -1,5 +1,5 @@
 
-package basedatos;
+package basedatos.template;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

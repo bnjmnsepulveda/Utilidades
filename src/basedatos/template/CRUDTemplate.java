@@ -1,12 +1,11 @@
-package basedatos;
+package basedatos.template;
+
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Crea operaciones de base de datos de forma dinamica, delegando solo la logica
@@ -15,16 +14,21 @@ import java.util.logging.Logger;
  * @author benjamin
  * @param <T>
  */
-public class DataBaseOperation<T> {
+public class CRUDTemplate<T> {
 
     private Connection conexion;
-    private static final Logger logger = Logger.getLogger(DataBaseOperation.class.getName());
+    private ResultSetAdapter adapter;
 
-    public DataBaseOperation(Connection conexion) {
+    public CRUDTemplate(ResultSetAdapter adapter) {
+        this.adapter = adapter;
+    }
+
+    public CRUDTemplate(Connection conexion, ResultSetAdapter adapter) {
         this.conexion = conexion;
+        this.adapter = adapter;
     }
     
-    public List<T> select(String sql, ResultSetAdapter adapter) {
+    public List<T> select(String sql) {
         List<T> lista = null;
         try {
             PreparedStatement ps = null;
@@ -33,9 +37,8 @@ public class DataBaseOperation<T> {
                 ps = conexion.prepareStatement(sql);
                 resultset = ps.executeQuery();
                 lista = adapter.retrieveList(resultset);
-
             } catch (SQLException ex) {
-                logger.log(Level.SEVERE, null, ex);
+                ex.printStackTrace(System.out);
             } finally {
                 if (ps != null) {
                     ps.close();
@@ -43,30 +46,26 @@ public class DataBaseOperation<T> {
                 if (resultset != null) {
                     resultset.close();
                 }
-                if (conexion != null) {
-               //     conexion.close();
-                }
             }
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, null, e);
+            e.printStackTrace(System.out);
         }
         return lista;
     }
 
-    public List<T> select(String sql, ResultSetAdapter adapter, PrepareStatementListener parametros) {
+    public List<T> select(String sql, PreparedStatementListener parametros) {
         List<T> lista = null;
         try {
             PreparedStatement ps = null;
             ResultSet resultset = null;
             try {
                 ps = conexion.prepareStatement(sql);
-                ps = parametros.getParametros(ps);
+                ps = parametros.addParametros(ps);
                 resultset = ps.executeQuery();
                 lista = adapter.retrieveList(resultset);
-
             } catch (SQLException ex) {
-                logger.log(Level.SEVERE, null, ex);
+                ex.printStackTrace(System.out);
             } finally {
                 if (ps != null) {
                     ps.close();
@@ -74,17 +73,41 @@ public class DataBaseOperation<T> {
                 if (resultset != null) {
                     resultset.close();
                 }
-                if (conexion != null) {
-                 //   conexion.close();
-                }
             }
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, null, e);
+            e.printStackTrace(System.out);
         }
         return lista;
     }
 
+    public Object selectOne(String sql, PreparedStatementListener parametros) {
+        Object lista = null;
+        try {
+            PreparedStatement ps = null;
+            ResultSet resultset = null;
+            try {
+                ps = conexion.prepareStatement(sql);
+                ps = parametros.addParametros(ps);
+                resultset = ps.executeQuery();
+                lista = adapter.retrieveElement(resultset);
+            } catch (SQLException ex) {
+                ex.printStackTrace(System.out);
+            } finally {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (resultset != null) {
+                    resultset.close();
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+        }
+        return lista;
+    }
+    
     public int update(String sql) {
         int resultado = -1;
         try {
@@ -94,7 +117,7 @@ public class DataBaseOperation<T> {
                 resultado = ps.executeUpdate();
 
             } catch (SQLException ex) {
-                logger.log(Level.SEVERE, null, ex);
+                ex.printStackTrace(System.out);
             } finally {
                 if (ps != null) {
                     ps.close();
@@ -102,47 +125,56 @@ public class DataBaseOperation<T> {
             }
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, null, e);
+            e.printStackTrace(System.out);
         }
         return resultado;
     }
 
-    public int update(String sql, PrepareStatementListener parametros) {
+    public int update(String sql, PreparedStatementListener parametros) {
         int resultado = -1;
         try {
-            //Connection connection = Postgres.conectar();
             PreparedStatement ps = null;
             try {
                 ps = conexion.prepareStatement(sql);
-                ps = parametros.getParametros(ps);
+                ps = parametros.addParametros(ps);
                 resultado = ps.executeUpdate();
-
             } catch (SQLException ex) {
-                logger.log(Level.SEVERE, null, ex);
+                ex.printStackTrace(System.out);
             } finally {
                 if (ps != null) {
                     ps.close();
                 }
-                if (conexion != null) {
-                   // conexion.close();
-                }
             }
 
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, null, e);
+            e.printStackTrace(System.out);
         }
         return resultado;
     }
 
-    /**
-     * Permite agregar parametros a el PreparementStatement de la operacion de
-     * base de datos.
-     */
-    public interface PrepareStatementListener {
-        PreparedStatement getParametros(PreparedStatement ps) throws SQLException;
+    public void closeConnection(Connection conexion){
+        try {
+            conexion.close();
+        } catch (SQLException ex) {
+           ex.printStackTrace(System.out);
+        }
+    }
+    
+    public Connection getConexion() {
+        return conexion;
     }
 
-    public interface SqlOperationListener {
-        ResultSet config(Connection conexion, PreparedStatement ps) throws SQLException;
+    public void setConexion(Connection conexion) {
+        this.conexion = conexion;
     }
+
+    public ResultSetAdapter getAdapter() {
+        return adapter;
+    }
+
+    public void setAdapter(ResultSetAdapter adapter) {
+        this.adapter = adapter;
+    }
+
+    
 }
