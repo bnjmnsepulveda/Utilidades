@@ -2,6 +2,7 @@ package basedatos.template.example;
 
 import basedatos.template.AbstractCRUDTemplate;
 import domain.Persona;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,7 +15,12 @@ import java.util.List;
 public class PersonaDAO2 extends AbstractCRUDTemplate<Persona> {
 
     @Override
-    public List<Persona> retrieveList(ResultSet rs) throws SQLException {
+    protected Connection getConection() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); 
+    }
+    
+    @Override
+    public List<Persona> retrieveEntityList(ResultSet rs) throws SQLException {
         List<Persona> personas = new ArrayList();
         Persona persona;
         while (rs.next()) {
@@ -29,7 +35,7 @@ public class PersonaDAO2 extends AbstractCRUDTemplate<Persona> {
     }
 
     @Override
-    public Persona retrieveElement(ResultSet rs) throws SQLException {
+    public Persona retrieveEntity(ResultSet rs) throws SQLException {
         Persona persona = null;
         if (rs.next()) {
             persona = new Persona();
@@ -44,5 +50,7 @@ public class PersonaDAO2 extends AbstractCRUDTemplate<Persona> {
     public List<Persona> readAll(){
         return select("SELECT * FROM persona");
     }
+
+    
 
 }

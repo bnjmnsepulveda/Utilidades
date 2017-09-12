@@ -1,6 +1,5 @@
 package basedatos.template;
 
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,153 +11,155 @@ import java.util.List;
  * de adaptacion de datos a un List,seteo de parametros y la consulta sql.
  *
  * @author benjamin
- * @param <T>
+ * @param <T> Objeto de dominio relacionado con modelo ER de base de datos.
  */
 public abstract class AbstractCRUDTemplate<T> {
 
-    private Connection conexion;
+    private Connection connection;
+    private PreparedStatement preparedStatement;
+    private ResultSet resultSet;
 
-    public abstract List<T> retrieveList(ResultSet rs) throws SQLException;
-    public abstract T retrieveElement(ResultSet rs) throws SQLException;
-    
+    protected abstract Connection getConection() throws SQLException;
+
+    protected abstract List<T> retrieveEntityList(ResultSet rs) throws SQLException;
+
+    protected abstract T retrieveEntity(ResultSet rs) throws SQLException;
+
     public List<T> select(String sql) {
-        List<T> lista = null;
+        List<T> entities = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection cx = null;
         try {
-            PreparedStatement ps = null;
-            ResultSet resultset = null;
-            try {
-                ps = conexion.prepareStatement(sql);
-                resultset = ps.executeQuery();
-                lista = retrieveList(resultset);
-            } catch (SQLException ex) {
-                ex.printStackTrace(System.out);
-            } finally {
-                if (ps != null) {
-                    ps.close();
-                }
-                if (resultset != null) {
-                    resultset.close();
-                }
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace(System.out);
+            cx = getConection();
+            ps = cx.prepareStatement(sql);
+            rs = ps.executeQuery();
+            entities = retrieveEntityList(rs);
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            closeResources(ps, rs, cx);
         }
-        return lista;
+        return entities;
     }
 
     public List<T> select(String sql, PreparedStatementListener parametros) {
-        List<T> lista = null;
+        List<T> entities = null;
+        PreparedStatement ps = null;
+        ResultSet resultset = null;
+        Connection cx = null;
         try {
-            PreparedStatement ps = null;
-            ResultSet resultset = null;
-            try {
-                ps = conexion.prepareStatement(sql);
-                ps = parametros.addParametros(ps);
-                resultset = ps.executeQuery();
-                lista = retrieveList(resultset);
-            } catch (SQLException ex) {
-                ex.printStackTrace(System.out);
-            } finally {
-                if (ps != null) {
-                    ps.close();
-                }
-                if (resultset != null) {
-                    resultset.close();
-                }
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace(System.out);
+            cx = getConection();
+            ps = cx.prepareStatement(sql);
+            ps = parametros.addParametros(ps);
+            resultset = ps.executeQuery();
+            entities = retrieveEntityList(resultset);
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            closeResources(ps, resultset, cx);
         }
-        return lista;
+        return entities;
     }
 
     public T selectOne(String sql, PreparedStatementListener parametros) {
         T entity = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection cx = null;
         try {
-            PreparedStatement ps = null;
-            ResultSet resultset = null;
-            try {
-                ps = conexion.prepareStatement(sql);
-                ps = parametros.addParametros(ps);
-                resultset = ps.executeQuery();
-                entity = retrieveElement(resultset);
-            } catch (SQLException ex) {
-                ex.printStackTrace(System.out);
-            } finally {
-                if (ps != null) {
-                    ps.close();
-                }
-                if (resultset != null) {
-                    resultset.close();
-                }
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace(System.out);
+            cx = getConection();
+            ps = cx.prepareStatement(sql);
+            ps = parametros.addParametros(ps);
+            rs = ps.executeQuery();
+            entity = retrieveEntity(rs);
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            closeResources(ps, rs, cx);
         }
         return entity;
     }
-    
+
     public int update(String sql) {
         int resultado = -1;
+        Connection cx = null;
+        PreparedStatement ps = null;
         try {
-            PreparedStatement ps = null;
-            try {
-                ps = conexion.prepareStatement(sql);
-                resultado = ps.executeUpdate();
-
-            } catch (SQLException ex) {
-                ex.printStackTrace(System.out);
-            } finally {
-                if (ps != null) {
-                    ps.close();
-                }
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace(System.out);
+            cx = getConection();
+            ps = cx.prepareStatement(sql);
+            resultado = ps.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            closeResources(ps, null, cx);
         }
         return resultado;
     }
 
     public int update(String sql, PreparedStatementListener parametros) {
         int resultado = -1;
+        Connection cx = null;
+        PreparedStatement ps = null;
         try {
-            PreparedStatement ps = null;
-            try {
-                ps = conexion.prepareStatement(sql);
-                ps = parametros.addParametros(ps);
-                resultado = ps.executeUpdate();
-            } catch (SQLException ex) {
-                ex.printStackTrace(System.out);
-            } finally {
-                if (ps != null) {
-                    ps.close();
-                }
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace(System.out);
+            cx = getConection();
+            ps = cx.prepareStatement(sql);
+            ps = parametros.addParametros(ps);
+            resultado = ps.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        } finally {
+            closeResources(ps, null, cx);
         }
         return resultado;
     }
 
-    public void closeConnection(Connection conexion){
+    public void closeResources(PreparedStatement preparedStatement, ResultSet resultSet, Connection conexion) {
         try {
-            conexion.close();
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
         } catch (SQLException ex) {
-           ex.printStackTrace(System.out);
+            ex.printStackTrace(System.out);
+        }
+        try {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
+        }
+        try {
+            if (conexion != null) {
+                conexion.close();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.out);
         }
     }
-    
-    public Connection getConexion() {
-        return conexion;
+
+    public Connection getConnection() {
+        return connection;
     }
 
-    public void setConexion(Connection conexion) {
-        this.conexion = conexion;
+    public void setConnection(Connection connection) {
+        this.connection = connection;
     }
-    
+
+    public PreparedStatement getPreparedStatement() {
+        return preparedStatement;
+    }
+
+    public void setPreparedStatement(PreparedStatement preparedStatement) {
+        this.preparedStatement = preparedStatement;
+    }
+
+    public ResultSet getResultSet() {
+        return resultSet;
+    }
+
+    public void setResultSet(ResultSet resultSet) {
+        this.resultSet = resultSet;
+    }
+
 }
