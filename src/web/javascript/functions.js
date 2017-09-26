@@ -48,3 +48,18 @@ function validarEmailAddress(emailInput) {
     }
     return true;
 }
+
+/**
+ * Transforma una cantidad de segundos en formato HORA:MINUTO:SEGUNDOS
+ * @param {type} segundos
+ * @returns {String}
+ */
+function formatearSegundos(segundos) {
+    var hours = Math.floor(segundos / 3600);
+    var minutes = Math.floor((segundos % 3600) / 60);
+    var seconds = Number((segundos % 60).toFixed(0)) + '';
+    hours = hours < 10 ? '0' + hours : hours;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    seconds = seconds < 10 ? '0' + seconds : seconds;
+    return hours + ':' + minutes + ':' + seconds;
+}
