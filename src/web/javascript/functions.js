@@ -63,3 +63,17 @@ function formatearSegundos(segundos) {
     seconds = seconds < 10 ? '0' + seconds : seconds;
     return hours + ':' + minutes + ':' + seconds;
 }
+
+/**
+ * funcion para mostrar u ocultar elemento
+ * @param {type} id
+ * @returns {undefined}
+ */
+function mostrarOcultar(id) {
+    var x = document.getElementById(id);
+    if (x.style.display === 'none') {
+        x.style.display = 'inline';
+    } else {
+        x.style.display = 'none';
+    }
+} 

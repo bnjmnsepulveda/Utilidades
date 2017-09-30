@@ -65,7 +65,6 @@ public final class SocketServerService implements Runnable {
                         String request = input.readLine();
                         System.out.println("Cliente> petición [" + request + "]");
                         String strOutput = listener.responseRequest(request);
-                        System.out.println("Servidor Principal> Resultado de petición");
                         System.out.println("Servidor Principal> " + strOutput);
                         output.flush();
                         output.println(strOutput);
