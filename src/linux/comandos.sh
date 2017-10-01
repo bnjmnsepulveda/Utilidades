@@ -66,5 +66,8 @@ iptables -L -n
 #ver ip no incluyendo de loopback
 hostname -I
 
+#ver mac conectadas y su direccion IP
+arp -n
+
 #volver al directorio anterior
 cd -
