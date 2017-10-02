@@ -6,3 +6,5 @@ manifest.mf
 app-git-repo/
 lib/CopyLibs
 lib/nblibraries.properties
+lib/javaee-web-api-7.0
+lib/JavaMail-1.4.4/docs
