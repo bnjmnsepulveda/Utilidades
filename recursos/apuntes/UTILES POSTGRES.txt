@@ -27,3 +27,8 @@ basename=# \d table
 
 El equivalente de DESCRIBE TABLE es
 basename=# \dt table
+
+#crear backup windows en ruta "Postgres carpeta instalacion"/bin
+pg_dump.exe -h localhost -p 5432 -U postgres -F c -v -d NOMBRE_BD -f RUTA
+#crear backup linux
+pg_dump -h localhost -p 5432 -U postgres -F c -v -d NOMBRE_BD -f RUTA
