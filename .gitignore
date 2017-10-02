@@ -4,3 +4,5 @@ build/
 dist/
 manifest.mf
 app-git-repo/
+lib/CopyLibs
+lib/nblibraries.properties
