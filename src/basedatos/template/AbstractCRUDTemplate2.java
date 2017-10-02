@@ -122,6 +122,29 @@ public abstract class AbstractCRUDTemplate2<T> {
         }
         return selectLong;
     }
+    
+    protected double selectDouble(String sql) throws SQLException {
+        connection = getConection();
+        preparedStatement = connection.prepareStatement(sql);
+        resultSet = preparedStatement.executeQuery();
+        double selectDouble = 0;
+        if (resultSet.next()) {
+            selectDouble = resultSet.getDouble(1);
+        }
+        return selectDouble;
+    }
+    
+    protected double selectDouble(String sql, PreparedStatementListener parametros) throws SQLException {
+        connection = getConection();
+        preparedStatement = connection.prepareStatement(sql);
+        preparedStatement =  parametros.addParametros(preparedStatement);
+        resultSet = preparedStatement.executeQuery();
+        double selectDouble = 0;
+        if (resultSet.next()) {
+            selectDouble = resultSet.getDouble(1);
+        }
+        return selectDouble;
+    }
 
     protected String selectString(String sql) throws SQLException {
         connection = getConection();

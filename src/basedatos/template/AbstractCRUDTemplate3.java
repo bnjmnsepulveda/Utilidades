@@ -26,25 +26,7 @@ public abstract class AbstractCRUDTemplate3<T> {
 
     protected abstract T retrieveEntity(ResultSet rs) throws SQLException;
 
-    protected List<T> select(String sql) {
-        List<T> entities = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        Connection cx = null;
-        try {
-            cx = getConection();
-            ps = cx.prepareStatement(sql);
-            rs = ps.executeQuery();
-            entities = retrieveEntityList(rs);
-        } catch (SQLException ex) {
-            ex.printStackTrace(System.out);
-        } finally {
-            closeResources(ps, rs, cx);
-        }
-        return entities;
-    }
-
-    protected List<T> select2(String sql) throws SQLException {
+    protected List<T> select(String sql) throws SQLException {
         connection = getConection();
         preparedStatement = connection.prepareStatement(sql);
         resultSet = preparedStatement.executeQuery();
@@ -52,7 +34,7 @@ public abstract class AbstractCRUDTemplate3<T> {
         return entities;
     }
 
-    protected List<T> select2(String sql, Object... parametros) throws SQLException {
+    protected List<T> select(String sql, Object... parametros) throws SQLException {
         connection = getConection();
         preparedStatement = connection.prepareStatement(sql);
         addParametros(parametros);
@@ -61,7 +43,7 @@ public abstract class AbstractCRUDTemplate3<T> {
         return entities;
     }
 
-    protected T selectOne2(String sql) throws SQLException {
+    protected T selectOne(String sql) throws SQLException {
         connection = getConection();
         preparedStatement = connection.prepareStatement(sql);
         resultSet = preparedStatement.executeQuery();
@@ -69,7 +51,7 @@ public abstract class AbstractCRUDTemplate3<T> {
         return entity;
     }
 
-    protected T selectOne2(String sql, Object... parametros) throws SQLException {
+    protected T selectOne(String sql, Object... parametros) throws SQLException {
         connection = getConection();
         preparedStatement = connection.prepareStatement(sql);
         addParametros(parametros);
@@ -123,8 +105,31 @@ public abstract class AbstractCRUDTemplate3<T> {
         }
         return selectLong;
     }
+    
+    protected double selectDouble(String sql) throws SQLException {
+        connection = getConection();
+        preparedStatement = connection.prepareStatement(sql);
+        resultSet = preparedStatement.executeQuery();
+        double selectDouble = 0;
+        if (resultSet.next()) {
+            selectDouble = resultSet.getDouble(1);
+        }
+        return selectDouble;
+    }
+    
+    protected double selectDouble(String sql, Object... parametros) throws SQLException {
+        connection = getConection();
+        preparedStatement = connection.prepareStatement(sql);
+        addParametros(parametros);
+        resultSet = preparedStatement.executeQuery();
+        double selectDouble = 0;
+        if (resultSet.next()) {
+            selectDouble = resultSet.getDouble(1);
+        }
+        return selectDouble;
+    }
 
-    protected String selectString(String sql) throws SQLException {
+    protected String selectString(String sql) throws SQLException {        
         connection = getConection();
         preparedStatement = connection.prepareStatement(sql);
         resultSet = preparedStatement.executeQuery();
@@ -160,101 +165,6 @@ public abstract class AbstractCRUDTemplate3<T> {
         addParametros(parametros);
         int resultado = preparedStatement.executeUpdate();
         return resultado;
-    }
-
-    protected List<T> select(String sql, PreparedStatementListener parametros) {
-        List<T> entities = null;
-        PreparedStatement ps = null;
-        ResultSet resultset = null;
-        Connection cx = null;
-        try {
-            cx = getConection();
-            ps = cx.prepareStatement(sql);
-            ps = parametros.addParametros(ps);
-            resultset = ps.executeQuery();
-            entities = retrieveEntityList(resultset);
-        } catch (SQLException ex) {
-            ex.printStackTrace(System.out);
-        } finally {
-            closeResources(ps, resultset, cx);
-        }
-        return entities;
-    }
-
-    protected T selectOne(String sql, PreparedStatementListener parametros) {
-        T entity = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        Connection cx = null;
-        try {
-            cx = getConection();
-            ps = cx.prepareStatement(sql);
-            ps = parametros.addParametros(ps);
-            rs = ps.executeQuery();
-            entity = retrieveEntity(rs);
-        } catch (SQLException ex) {
-            ex.printStackTrace(System.out);
-        } finally {
-            closeResources(ps, rs, cx);
-        }
-        return entity;
-    }
-
-    protected int update(String sql) {
-        int resultado = -1;
-        Connection cx = null;
-        PreparedStatement ps = null;
-        try {
-            cx = getConection();
-            ps = cx.prepareStatement(sql);
-            resultado = ps.executeUpdate();
-        } catch (SQLException ex) {
-            ex.printStackTrace(System.out);
-        } finally {
-            closeResources(ps, null, cx);
-        }
-        return resultado;
-    }
-
-    protected int update(String sql, PreparedStatementListener parametros) {
-        int resultado = -1;
-        Connection cx = null;
-        PreparedStatement ps = null;
-        try {
-            cx = getConection();
-            ps = cx.prepareStatement(sql);
-            ps = parametros.addParametros(ps);
-            resultado = ps.executeUpdate();
-        } catch (SQLException ex) {
-            ex.printStackTrace(System.out);
-        } finally {
-            closeResources(ps, null, cx);
-        }
-        return resultado;
-    }
-
-    public void closeResources(PreparedStatement preparedStatement, ResultSet resultSet, Connection conexion) {
-        try {
-            if (preparedStatement != null) {
-                preparedStatement.close();
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace(System.out);
-        }
-        try {
-            if (resultSet != null) {
-                resultSet.close();
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace(System.out);
-        }
-        try {
-            if (conexion != null) {
-                conexion.close();
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace(System.out);
-        }
     }
 
     public void closeResources() {
@@ -304,7 +214,7 @@ public abstract class AbstractCRUDTemplate3<T> {
                 java.util.Date time = (java.util.Date) parametro;
                 preparedStatement.setTimestamp(index, new java.sql.Timestamp(time.getTime()));
             } else {
-                throw new IllegalArgumentException(parametro.getClass().getName() + " not supported for PreparedStatement.");
+                throw new IllegalArgumentException(parametro.getClass().getName() + " not supported for PreparedStatement, parameter nº " + index);
             }
             index++;
         }
