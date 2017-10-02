@@ -76,7 +76,76 @@ public abstract class AbstractCRUDTemplate2<T> {
         T entity = retrieveEntity(resultSet);
         return entity;
     }
+
+    protected int selectInt(String sql) throws SQLException {
+        connection = getConection();
+        preparedStatement = connection.prepareStatement(sql);
+        resultSet = preparedStatement.executeQuery();
+        int selectInt = 0;
+        if (resultSet.next()) {
+            selectInt = resultSet.getInt(1);
+        }
+        return selectInt;
+    }
+
+    protected int selectInt(String sql, PreparedStatementListener parametros) throws SQLException {
+        connection = getConection();
+        preparedStatement = connection.prepareStatement(sql);
+        preparedStatement = parametros.addParametros(preparedStatement);
+        resultSet = preparedStatement.executeQuery();
+        int selectInt = 0;
+        if (resultSet.next()) {
+            selectInt = resultSet.getInt(1);
+        }
+        return selectInt;
+    }
     
+    protected long selectLong(String sql) throws SQLException {
+        connection = getConection();
+        preparedStatement = connection.prepareStatement(sql);
+        resultSet = preparedStatement.executeQuery();
+        long selectLong = 0;
+        if (resultSet.next()) {
+            selectLong = resultSet.getLong(1);
+        }
+        return selectLong;
+    }
+
+    protected long selectLong(String sql, PreparedStatementListener parametros) throws SQLException {
+        connection = getConection();
+        preparedStatement = connection.prepareStatement(sql);
+        preparedStatement = parametros.addParametros(preparedStatement);
+        resultSet = preparedStatement.executeQuery();
+        long selectLong = 0;
+        if (resultSet.next()) {
+            selectLong = resultSet.getLong(1);
+        }
+        return selectLong;
+    }
+
+    protected String selectString(String sql) throws SQLException {
+        connection = getConection();
+        preparedStatement = connection.prepareStatement(sql);
+        resultSet = preparedStatement.executeQuery();
+        String selectString = null;
+        if (resultSet.next()) {
+            selectString = resultSet.getString(1);
+        }
+        return selectString;
+    }
+
+    protected String selectString(String sql, PreparedStatementListener parametros) throws SQLException {
+        connection = getConection();
+        preparedStatement = connection.prepareStatement(sql);
+        preparedStatement = parametros.addParametros(preparedStatement);
+        resultSet = preparedStatement.executeQuery();
+        String selectString = null;
+        if (resultSet.next()) {
+            selectString = resultSet.getString(1);
+        }
+        return selectString;
+    }
+
     protected int save(String sql) throws SQLException {
         connection = getConection();
         preparedStatement = connection.prepareStatement(sql);
@@ -145,8 +214,6 @@ public abstract class AbstractCRUDTemplate2<T> {
         }
         return resultado;
     }
-
-    
 
     protected int update(String sql, PreparedStatementListener parametros) {
         int resultado = -1;
