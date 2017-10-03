@@ -21,7 +21,7 @@ public abstract class AbstractCRUDTemplate4<T> {
     private ResultSet resultSet;
 
     protected abstract Connection getConection() throws SQLException;
-
+    
     protected abstract T adapterEntity(ResultSet rs) throws SQLException;
 
     protected List<T> select(String sql) throws SQLException {
