@@ -235,6 +235,8 @@ public abstract class AbstractCRUDTemplate4<T> {
             } else if (parametro instanceof java.util.Date) {
                 java.util.Date time = (java.util.Date) parametro;
                 preparedStatement.setTimestamp(index, new java.sql.Timestamp(time.getTime()));
+            } else if (parametro instanceof Boolean) {
+                preparedStatement.setBoolean(index, Boolean.parseBoolean(parametro.toString().trim()));
             } else {
                 throw new IllegalArgumentException(parametro.getClass().getName() + " not supported for PreparedStatement, parameter nº " + index);
             }
