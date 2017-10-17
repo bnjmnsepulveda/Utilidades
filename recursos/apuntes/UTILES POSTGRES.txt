@@ -40,3 +40,5 @@ pg_dump -h localhost -p 5432 -U postgres -s -v -d NOMBRE_BD -f RUTA
 pg_dump -h localhost -p 5432 -U postgres -a -v -d NOMBRE_BD -f RUTA
 #respaldo de solo data con inserts en vez de copy
 pg_dump -h localhost -p 5432 -U postgres -a --inserts -v -d NOMBRE_BD -f RUTA
+#respaldo y restauracion desde local a remoto :D
+$ pg_dump -d db_name | psql -h host_name -d db_name

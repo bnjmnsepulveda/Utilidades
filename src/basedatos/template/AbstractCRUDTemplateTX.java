@@ -22,18 +22,18 @@ public abstract class AbstractCRUDTemplateTX<T> {
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
 
-    protected abstract Connection getConection() throws SQLException;
-
+    public AbstractCRUDTemplateTX(Connection connection) {
+        this.connection = connection;
+    }
+    
     protected abstract T adapterEntity(ResultSet rs) throws SQLException;
 
     public void connectTransacction() throws SQLException {
-        connection = getConection();
         connection.setAutoCommit(false);
         transacctionActive = true;
     }
 
     public void connectNonTransacction() throws SQLException {
-        connection = getConection();
         transacctionActive = false;
     }
 
