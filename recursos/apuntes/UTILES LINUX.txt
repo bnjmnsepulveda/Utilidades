@@ -62,3 +62,6 @@ iptables -F
 
 PARA LISTAR LAS REGLAS DE LAS TABLAS IP
 iptables -L -n
+
+#servicios en 3 y 5 nivel
+chkconfig <servicio> on --level 35
