@@ -77,3 +77,10 @@ function mostrarOcultar(id) {
         x.style.display = 'none';
     }
 } 
+
+function checkedInputs(){
+    var ids = [];
+    $('#input-agregar-agentes-grupo input:checked').each(function () {
+        ids.push($(this).val());
+    });
+}
