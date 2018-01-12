@@ -15,3 +15,6 @@ CREATE TABLE orders (
     product_no integer REFERENCES products (product_no),
     quantity integer
 );
+
+--rango de fecha estatico
+select * from persona WHERE to_char(persona.fecha_envio, 'YYYY/MM/DD') = to_char(NOW(), 'YYYY/MM/DD')
