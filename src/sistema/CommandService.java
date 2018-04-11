@@ -15,76 +15,70 @@ public class CommandService {
 
     private static Logger logger = LogManager.getLogger(CommandService.class);
 
-    /**
+/**
      * Ejecuta un comando y devuelve la salida en String.
      *
      * @param cmd comando a ejecutar
      * @return
+     * @throws java.io.IOException
      */
-    public String executeCommand(String cmd) {
-        String linea = null;
+    public String executeCommand2(String cmd) throws IOException {
+        String linea;
         String salida = null;
-        String lineaError = null;
-        String salidaError = null;
-        Process proceso = null;
+        String lineaError;
+        String salidaError;
+        Process proceso;
+        InputStreamReader entrada = null;
+        InputStreamReader error = null;
+        BufferedReader stdInput = null;
+        BufferedReader stdError = null;
         try {
-            InputStreamReader entrada = null;
-            InputStreamReader error = null;
-            BufferedReader stdInput = null;
-            BufferedReader stdError = null;
-            try {
-                String[] pipelineCmd = {
-                    "/bin/bash",
-                    "-c",
-                    cmd
-                };
-                proceso = Runtime.getRuntime().exec(pipelineCmd);
-                entrada = new InputStreamReader(proceso.getInputStream());
-                error = new InputStreamReader(proceso.getErrorStream());
-                stdInput = new BufferedReader(entrada);
-                stdError = new BufferedReader(error);
-                logger.info("Comando a ejecutar " + cmd);
-                if ((linea = stdInput.readLine()) != null) {
-                    salida = linea;
-                    while ((linea = stdInput.readLine()) != null) {
-                        salida += linea + "\n";
-                    }
-                    logger.info("Resultado del comando " + salida);
-                } else {
-                    logger.info("No se a producido ninguna salida");
+            String[] pipelineCmd = {
+                "/bin/bash",
+                "-c",
+                cmd
+            };
+            proceso = Runtime.getRuntime().exec(pipelineCmd);
+            entrada = new InputStreamReader(proceso.getInputStream());
+            error = new InputStreamReader(proceso.getErrorStream());
+            stdInput = new BufferedReader(entrada);
+            stdError = new BufferedReader(error);
+            System.out.println("Comando a ejecutar " + cmd);
+            if ((linea = stdInput.readLine()) != null) {
+                salida = linea;
+                while ((linea = stdInput.readLine()) != null) {
+                    salida += linea + "\n";
                 }
-                if ((lineaError = stdError.readLine()) != null) {
-                    salidaError = lineaError;
-                    while ((lineaError = stdError.readLine()) != null) {
-                        salidaError += lineaError + "\n";
-                    }
-                    logger.warn("Resultado del error en comando " + salidaError);
-                }
-            } catch (IOException ioe) {
-                logger.error(ioe.getMessage(), ioe);
-            } catch (Exception e) {
-                logger.error(e.getMessage(), e);
-            } finally {
-                if (entrada != null) {
-                    entrada.close();
-                }
-                if (error != null) {
-                    error.close();
-                }
-                if (stdInput != null) {
-                    stdInput.close();
-                }
-                if (stdError != null) {
-                    stdError.close();
-                }
+                System.out.println("Resultado del comando " + salida);
+            } else {
+                System.out.println("No se a producido ninguna salida");
             }
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            if ((lineaError = stdError.readLine()) != null) {
+                salidaError = lineaError;
+                while ((lineaError = stdError.readLine()) != null) {
+                    salidaError += lineaError + "\n";
+                }
+                System.out.println("Resultado del error en comando " + salidaError);
+            }
+        } catch (IOException ioe) {
+            throw ioe;
+        } finally {
+            if (entrada != null) {
+                entrada.close();
+            }
+            if (error != null) {
+                error.close();
+            }
+            if (stdInput != null) {
+                stdInput.close();
+            }
+            if (stdError != null) {
+                stdError.close();
+            }
         }
         return salida;
     }
 
-    @SuppressWarnings("ConvertToTryWithResources")
     public static String execute(String cmd) throws IOException {
         String linea;
         String salida = null;
@@ -94,15 +88,16 @@ public class CommandService {
             cmd
         };
         Process proceso = Runtime.getRuntime().exec(pipelineCmd);
-        InputStreamReader entrada = new InputStreamReader(proceso.getInputStream());
-        BufferedReader stdInput = new BufferedReader(entrada);
-        if ((linea = stdInput.readLine()) != null) {
-            salida = linea;
-            while ((linea = stdInput.readLine()) != null) {
-                salida += linea + "\n";
+        BufferedReader stdInput;
+        try (InputStreamReader entrada = new InputStreamReader(proceso.getInputStream())) {
+            stdInput = new BufferedReader(entrada);
+            if ((linea = stdInput.readLine()) != null) {
+                salida = linea;
+                while ((linea = stdInput.readLine()) != null) {
+                    salida += linea + "\n";
+                }
             }
-        }        
-        entrada.close();
+        }
         stdInput.close();
         return salida;
     }

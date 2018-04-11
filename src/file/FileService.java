@@ -1,5 +1,6 @@
 package file;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,5 +36,26 @@ public class FileService {
             e.printStackTrace(System.out);
         }
         return p;
+    }
+    
+    public void listarFicherosPorCarpeta(File carpeta) {
+        for (File ficheroEntrada : carpeta.listFiles()) {
+            if (ficheroEntrada.isDirectory()) {
+                listarFicherosPorCarpeta(ficheroEntrada);
+            } else {
+                System.out.println(ficheroEntrada.getName());
+            }
+        }
+    }
+
+    public java.util.List<String> getArchivosRecursivamente(File carpeta, java.util.List<String> archivos) {
+        for (File ficheroEntrada : carpeta.listFiles()) {
+            if (ficheroEntrada.isDirectory()) {
+                getArchivosRecursivamente(ficheroEntrada, archivos);
+            } else {
+                archivos.add(ficheroEntrada.getAbsolutePath());
+            }
+        }
+        return archivos;
     }
 }
