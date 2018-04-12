@@ -71,3 +71,6 @@ arp -n
 
 #volver al directorio anterior
 cd -
+
+#ver version de linux
+lsb_release -irc
