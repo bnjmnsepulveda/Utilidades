@@ -41,3 +41,6 @@ git commit -m ".gitignore is now working"
 
 #eliminar origin remote
 git remote rm <nombre_origin>
+
+#renombrar un remoto
+git remote rename origin origin_nuevo_nombre

@@ -62,3 +62,15 @@ iptables -F
 
 PARA LISTAR LAS REGLAS DE LAS TABLAS IP
 iptables -L -n
+
+#servicios en 3 y 5 nivel
+chkconfig <servicio> on --level 35
+
+# ejecutar comando en loop en linux
+while true; do COMANDO; sleep 1; clear; done
+
+#cambiar propietario de archivos en linux
+chown propietario:grupo archivo.txt
+
+#cambiar recursivamente
+chown -R propietario:grupo .

@@ -80,7 +80,7 @@ public class EmailService {
                         addrs[x] = new InternetAddress(destinatarios[x]);
                     }
                     message.setRecipients(Message.RecipientType.TO, addrs);
-                    DataHandler dh = new DataHandler(msg, "text/html");
+                    DataHandler dh = new DataHandler(msg, "text/html;charset=UTF-8");
                     message.setDataHandler(dh);
                     Transport.send(message);
                 } catch (MessagingException ex) {

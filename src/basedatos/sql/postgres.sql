@@ -33,3 +33,6 @@ ALTER TABLE empleados ADD FOREIGN KEY(nombre_columna) REFERENCES nomina(nombre_c
 ALTER TABLE empleados ALTER COLUMN nombre_columna DROP default
 --Agregar un valor por default a una columna
 ALTER TABLE empleados ALTER COLUMN nombre_columna SET DEFAULT 125
+--Unique a columnas ya creadas
+ALTER TABLE tablename ADD CONSTRAINT constraintname UNIQUE (columns);
+

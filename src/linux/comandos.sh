@@ -74,3 +74,9 @@ cd -
 
 #cambiar usuari y grupo a directorio
 chown -R usuario:grupo /home/directorio
+
+#ver version de linux
+lsb_release -irc
+
+#liberar RAM
+sudo sync && sudo sysctl -w vm.drop_caches=3
