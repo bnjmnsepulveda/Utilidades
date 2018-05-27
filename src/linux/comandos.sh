@@ -71,3 +71,6 @@ arp -n
 
 #volver al directorio anterior
 cd -
+
+#cambiar usuari y grupo a directorio
+chown -R usuario:grupo /home/directorio
