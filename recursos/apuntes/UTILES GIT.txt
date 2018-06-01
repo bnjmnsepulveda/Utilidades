@@ -44,3 +44,12 @@ git remote rm <nombre_origin>
 
 #renombrar un remoto
 git remote rename origin origin_nuevo_nombre
+
+#volver a un archivo especifico
+git checkout <commit o branch> <ruta archivo>
+
+#última versión que hiciste commit
+git checkout HEAD path/to/file
+
+# Deshacer el último commit (dejándolo como estaba con los archivos añadidos y demás)
+git reset --soft HEAD^
