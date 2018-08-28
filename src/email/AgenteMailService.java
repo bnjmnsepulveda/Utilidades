@@ -82,6 +82,7 @@ public class AgenteMailService extends AbstractMailService {
                     adjuntos = new ArrayList();
                     String contenidoHtml = "";
                     String contenidoText = "";
+
                     bodyText.setContent(contenidoText, "text/plain;charset=UTF-8");
                     bodyHtml.setContent(contenidoHtml, "text/html;charset=UTF-8");
                     alternative.addBodyPart(bodyText);
@@ -116,6 +117,7 @@ public class AgenteMailService extends AbstractMailService {
                     bodyHtml = new MimeBodyPart();
                     String contenidoHtml = content + "";
                     String contenidoText = content + "";
+
                     bodyText.setContent(contenidoText, "text/plain;charset=UTF-8");
                     bodyHtml.setContent(contenidoHtml, "text/html;charset=UTF-8");
                     alternative.addBodyPart(bodyText);
