@@ -1,0 +1,9 @@
+
+#descargar javadocs
+mvn dependency:sources
+
+#se puede usar con otros comandos
+mvn clean install dependency:sources -Dmaven.test.skip=true
+
+#descargar toda la documentacion
+mvn dependency:resolve -Dclassifier=javadoc
