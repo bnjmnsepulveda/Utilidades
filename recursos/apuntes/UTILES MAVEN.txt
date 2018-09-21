@@ -1,4 +1,7 @@
 
+#crear aplicacion web
+mvn archetype:generate -DgroupId=GRUPO_ID -DartifactId=NOMBRE_PROYECTO -DarchetypeArtifactId=maven-archetype-webapp -DinteractiveMode=false
+
 #descargar javadocs
 mvn dependency:sources
 
