@@ -30,9 +30,14 @@ public abstract class DAOTemplate<T> {
         closeConnection = false;
     }
 
+    protected abstract Connection buildConnection() throws SQLException;
+
     protected abstract T adapterEntity(ResultSet rs) throws SQLException;
 
     protected List<T> select(String sql, Object... parametros) throws SQLException {
+        if(closeConnection) {
+            connection = buildConnection();
+        }
         preparedStatement = connection.prepareStatement(sql);
         addParams(parametros);
         resultSet = preparedStatement.executeQuery();
@@ -42,8 +47,25 @@ public abstract class DAOTemplate<T> {
         }
         return entities;
     }
-
+    
+    protected List<T> readAll(String sql, Object... parametros) {
+        List<T> list = null;
+        try {
+            list = select(sql, parametros);
+        } catch (SQLException e) {
+           throw  new RuntimeException(e.getMessage(), e);
+        } catch (Exception e) {
+           throw  new RuntimeException(e.getMessage(), e);
+        } finally {
+            closeResources();
+        }
+        return list;
+    }
+     
     protected T selectOne(String sql, Object... parametros) throws SQLException {
+        if(closeConnection) {
+            connection = buildConnection();
+        }
         preparedStatement = connection.prepareStatement(sql);
         addParams(parametros);
         resultSet = preparedStatement.executeQuery();
@@ -53,8 +75,25 @@ public abstract class DAOTemplate<T> {
         }
         return entity;
     }
+    
+    protected T read(String sql, Object... parametros) {
+        T entity = null;
+        try {
+            entity = selectOne(sql, parametros);
+        } catch (SQLException e) {
+           throw  new RuntimeException(e.getMessage(), e);
+        } catch (Exception e) {
+           throw  new RuntimeException(e.getMessage(), e);
+        } finally {
+            closeResources();
+        }
+        return entity;
+    }
 
     protected int selectInt(String sql, Object... parametros) throws SQLException {
+        if(closeConnection) {
+            connection = buildConnection();
+        }
         preparedStatement = connection.prepareStatement(sql);
         addParams(parametros);
         resultSet = preparedStatement.executeQuery();
@@ -64,8 +103,25 @@ public abstract class DAOTemplate<T> {
         }
         return selectInt;
     }
+    
+    protected int readInt(String sql, Object... parametros) {
+        int numeroInt = -1;
+        try {
+            numeroInt = selectInt(sql, parametros);
+        } catch (SQLException e) {
+           throw  new RuntimeException(e.getMessage(), e);
+        } catch (Exception e) {
+           throw  new RuntimeException(e.getMessage(), e);
+        } finally {
+            closeResources();
+        }
+        return numeroInt;
+    }
 
     protected long selectLong(String sql, Object... parametros) throws SQLException {
+        if(closeConnection) {
+            connection = buildConnection();
+        }
         preparedStatement = connection.prepareStatement(sql);
         addParams(parametros);
         resultSet = preparedStatement.executeQuery();
@@ -75,8 +131,25 @@ public abstract class DAOTemplate<T> {
         }
         return selectLong;
     }
+    
+    protected long readLong(String sql, Object... parametros) {
+        long numeroLong = -1;
+        try {
+            numeroLong = selectLong(sql, parametros);
+        } catch (SQLException e) {
+           throw  new RuntimeException(e.getMessage(), e);
+        } catch (Exception e) {
+           throw  new RuntimeException(e.getMessage(), e);
+        } finally {
+            closeResources();
+        }
+        return numeroLong;
+    }
 
     protected double selectDouble(String sql, Object... parametros) throws SQLException {
+        if(closeConnection) {
+            connection = buildConnection();
+        }
         preparedStatement = connection.prepareStatement(sql);
         addParams(parametros);
         resultSet = preparedStatement.executeQuery();
@@ -86,8 +159,25 @@ public abstract class DAOTemplate<T> {
         }
         return selectDouble;
     }
+    
+    protected double readDouble(String sql, Object... parametros) {
+        double numeroDouble = -1;
+        try {
+            numeroDouble = selectDouble(sql, parametros);
+        } catch (SQLException e) {
+           throw  new RuntimeException(e.getMessage(), e);
+        } catch (Exception e) {
+           throw  new RuntimeException(e.getMessage(), e);
+        } finally {
+            closeResources();
+        }
+        return numeroDouble;
+    }
 
     protected String selectString(String sql, Object... parametros) throws SQLException {
+        if(closeConnection) {
+            connection = buildConnection();
+        }
         preparedStatement = connection.prepareStatement(sql);
         addParams(parametros);
         resultSet = preparedStatement.executeQuery();
@@ -97,8 +187,53 @@ public abstract class DAOTemplate<T> {
         }
         return selectString;
     }
+    
+    protected String readString(String sql, Object... parametros) {
+        String stringResultado = null;
+        try {
+            stringResultado = selectString(sql, parametros);
+        } catch (SQLException e) {
+           throw  new RuntimeException(e.getMessage(), e);
+        } catch (Exception e) {
+           throw  new RuntimeException(e.getMessage(), e);
+        } finally {
+            closeResources();
+        }
+        return stringResultado;
+    }
+    
+    protected List<String> selectListString(String sql, Object... parametros) throws SQLException {
+        if(closeConnection) {
+            connection = buildConnection();
+        }
+        preparedStatement = connection.prepareStatement(sql);
+        addParams(parametros);
+        resultSet = preparedStatement.executeQuery();
+        List<String> stringList = new ArrayList();
+        while (resultSet.next()) {
+            stringList.add(resultSet.getString(1));
+        }
+        return stringList;
+    }
+    
+    protected List<String> readListString(String sql, Object... parametros) {
+        List<String> listString = null;
+        try {
+            listString = selectListString(sql, parametros);
+        } catch (SQLException e) {
+           throw  new RuntimeException(e.getMessage(), e);
+        } catch (Exception e) {
+           throw  new RuntimeException(e.getMessage(), e);
+        } finally {
+            closeResources();
+        }
+        return listString;
+    }
 
     protected boolean selectBoolean(String sql, Object... parametros) throws SQLException {
+        if(closeConnection) {
+            connection = buildConnection();
+        }
         preparedStatement = connection.prepareStatement(sql);
         addParams(parametros);
         resultSet = preparedStatement.executeQuery();
@@ -108,12 +243,50 @@ public abstract class DAOTemplate<T> {
         }
         return selectboolean;
     }
+    
+    protected boolean readBoolean(String sql, Object... parametros) {
+        boolean booleanResultado = false;
+        try {
+            booleanResultado = selectBoolean(sql, parametros);
+        } catch (SQLException e) {
+           throw  new RuntimeException(e.getMessage(), e);
+        } catch (Exception e) {
+           throw  new RuntimeException(e.getMessage(), e);
+        } finally {
+            closeResources();
+        }
+        return booleanResultado;
+    }
 
     protected int save(String sql, Object... parametros) throws SQLException {
+        if(closeConnection) {
+            connection = buildConnection();
+        }
         preparedStatement = connection.prepareStatement(sql);
         addParams(parametros);
         int resultado = preparedStatement.executeUpdate();
         return resultado;
+    }
+    
+    /**
+     * Actualiza el modelo de base de datos, este metodo controla la apertura 
+     * y cierre de recursos JDBC.
+     * @param sql
+     * @param parametros
+     * @return 
+     */
+    protected int update(String sql, Object... parametros) {
+        int resultadoOperacion = -1;
+        try {
+            resultadoOperacion = save(sql, parametros);
+        } catch (SQLException e) {
+           throw  new RuntimeException(e.getMessage(), e);
+        } catch (Exception e) {
+           throw  new RuntimeException(e.getMessage(), e);
+        } finally {
+            closeResources();
+        }
+        return resultadoOperacion;
     }
 
     public void closeResources() {
@@ -175,7 +348,27 @@ public abstract class DAOTemplate<T> {
             } else if (parametro instanceof Boolean) {
                 preparedStatement.setBoolean(index, Boolean.parseBoolean(parametro.toString().trim()));
             } else if (parametro == null) {
-                throw new NullPointerException("parameter on index " + index + " is a null value.");
+                String nombreClaseEsperada = preparedStatement.getParameterMetaData().getParameterClassName(index);
+                if (nombreClaseEsperada.equals("java.lang.String")) {
+                    preparedStatement.setString(index, null);
+                } else if (nombreClaseEsperada.equals("java.lang.Integer")) {
+                    preparedStatement.setInt(index, 0);
+                } else if (nombreClaseEsperada.equals("java.lang.Long")) {
+                    preparedStatement.setLong(index, 0);
+                } else if (nombreClaseEsperada.equals("java.lang.Double")) {
+                    preparedStatement.setDouble(index, 0);
+                } else if (nombreClaseEsperada.equals("java.lang.Boolean")) {
+                    preparedStatement.setBoolean(index, false);
+                } else if (nombreClaseEsperada.equals("java.util.Date")) {
+                    preparedStatement.setTimestamp(index, null);
+                } else {
+                    String tipoBasedatos = preparedStatement.getParameterMetaData()
+                            .getParameterTypeName(index);
+                    throw new NullPointerException("parametro en index " + index
+                            + " es null, necesita setear la clase "
+                            + nombreClaseEsperada + " para el tipo " + tipoBasedatos);
+                }
+
             } else {
                 throw new IllegalArgumentException(parametro.getClass().getName() + " not supported for PreparedStatement, parameter nº " + index);
             }
