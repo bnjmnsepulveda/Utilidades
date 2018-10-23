@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.Date;
 
 /**
  *
@@ -18,6 +19,39 @@ import java.sql.Types;
  */
 public class ConsultasComplejas {
     
+    /**
+     * Muestra la consulta sql que se ejecutara con el reemplazo del 
+     * caracter "?" con el valor correspondiente.
+     * @param sql sql a ejecutar.
+     * @param parametros parametros a ingresar para la consulta, estos deben 
+     * ir en el orden especificado por la querie.
+     * @return 
+     */
+    public static String mostrarConsulta(String sql, Object... parametros) {
+        String[] spl = sql.split("\\?");
+        StringBuilder sb = new StringBuilder();
+        int indiceParametro = 0;
+        for (String spl1 : spl) {
+            sb.append(spl1);
+            for (int x = indiceParametro; x < parametros.length; x++) {
+                Object parametro = parametros[x];
+                String reemplazo = "";
+                if (parametro instanceof String) {
+                    reemplazo = "'" + parametro.toString() + "'";
+                } else if (parametro instanceof Integer) {
+                    reemplazo = parametro.toString();
+                } else if (parametro instanceof Double) {
+                    reemplazo = parametro.toString();
+                } else if (parametro instanceof Date) {
+                    reemplazo = ((Date) parametro).getTime() + "";
+                }
+                sb.append(reemplazo);
+                indiceParametro = (x + 1);
+                break;
+            }
+        }
+        return sb.toString();
+    }
     /**
      * Lee la cantidad yel tipo de columnsas sql.
      * @param sql
